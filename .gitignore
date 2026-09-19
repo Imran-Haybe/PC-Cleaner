@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Editors / tools
+.idea/
+.vscode/
+.claude/
+
+# Local test data and output
+PCC_QA/
+*.log
