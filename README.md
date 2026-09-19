@@ -100,8 +100,22 @@ The first automated run failed 14 tests and exposed real defects, all now fixed 
 - **Near-duplicates are not detected.** A copy that differs by one byte is a different file.
 - **A folder *named* `windows`, `appdata` or `.git` anywhere in a tree is skipped**, even if it is your own.
 - **Old files** use the newer of last-access and last-modified time, because Windows may not update access times. Creation time is ignored.
-- **Not yet verified on real hardware:** whether Recycle Bin deletion is really recoverable on a USB stick or network drive, and whether scanning OneDrive "online-only" files triggers a download. Treat both with care until they are covered by the [test plan](TEST_PLAN.md).
 - `.log`, `.bak` and `.old` files anywhere in your user folder are listed as junk. Some of those may be backups you want. Read the list.
+- **The junk scan (option 4) ignores the folder you entered.** It always scans your system temp locations and your user folder.
+
+## Not yet verified
+
+The automated tests cover the logic thoroughly, but a few situations depend on real hardware or cloud setups and have **not been tested yet**. They are written up as manual cases in the [test plan](TEST_PLAN.md). Until they are checked, please be careful in these situations:
+
+| Situation | What is unknown | Precaution |
+|-----------|-----------------|------------|
+| **USB drives and network shares** | Windows has no Recycle Bin on these, so "Recycle Bin" deletion may delete permanently without warning (this is how the `send2trash` library is expected to behave, but it has not been confirmed here) | Treat any deletion on a removable or network drive as permanent |
+| **OneDrive "online-only" files** | Reading a cloud-only file to hash it may trigger a download | Avoid running the duplicate scan on an OneDrive folder that holds online-only files |
+| **Very long paths (over 260 characters)** | Scanning and deleting have not been tested with them | Shorten or move deeply nested folders first |
+| **Network paths (`\\server\share`)** | Not tested | Scan a local folder instead |
+| **A whole drive (`C:\`) or 100,000+ files** | Speed and memory use have not been measured | Start with a single folder |
+
+If you try any of these and hit a problem, please [open an issue](https://github.com/Imran-Haybe/PC-Cleaner/issues).
 
 ## Licence
 
